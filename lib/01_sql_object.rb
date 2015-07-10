@@ -15,10 +15,6 @@ class SQLObject
   end
 
   def self.finalize!
-    # define_method("attributes") do
-    #   @attributes ||= {}
-    # end
-
     columns.each do |col|
       define_method("#{col}") do
         attributes[col]
