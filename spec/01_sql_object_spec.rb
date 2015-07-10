@@ -1,5 +1,6 @@
 require '01_sql_object'
 require 'securerandom'
+require 'active_support/inflector'
 
 describe SQLObject do
   before(:each) { DBConnection.reset }
