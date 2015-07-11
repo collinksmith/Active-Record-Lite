@@ -76,4 +76,48 @@ describe 'Associatable' do
       expect(house.address).to eq('26th and Guerrero')
     end
   end
+
+  describe '#has_many_through' do
+    before(:all) do
+      class Doctor < SQLObject
+        has_many :appointments
+        has_many :stethoscopes
+        finalize!
+      end
+
+      class Appointment < SQLObject
+        belongs_to :doctor
+        belongs_to :patient
+        has_many_through :stethoscopes, :doctor, :stethoscopes
+        finalize!
+      end
+
+      class Patient < SQLObject
+        has_many :appointments
+        has_many_through :doctors, :appointments, :doctor
+        finalize!
+      end
+
+      class Stethoscopes < SQLObject
+        belongs_to :doctor
+      end
+    end
+
+    let(:patient) { Patient.find(1) }
+    let(:appt) { Appointment.find(1) }
+
+    it "finds many doctors for a patient through appointments (has_many => belongs_to)" do
+      doctors = patient.doctors
+
+      expect(doctors.first).to be_instance_of(Doctor)
+      expect(doctors.length).to eq(3)
+    end
+
+    it "finds many stethoscopes for an appointment through doctor (belongs_to => has_many)" do
+      stethoscopes = appt.stethoscopes
+
+      expect(stethoscopes.first).to be_instance_of(Stethoscope)
+      expect(stethoscopes.length).to eq(2)
+    end
+  end
 end

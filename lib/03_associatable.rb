@@ -64,6 +64,8 @@ module Associatable
 
       options.model_class.where(params)
     end
+    
+      assoc_options[name.to_sym] = options
   end
 
   def assoc_options
