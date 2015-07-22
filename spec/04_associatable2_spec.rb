@@ -98,8 +98,9 @@ describe 'Associatable' do
         finalize!
       end
 
-      class Stethoscopes < SQLObject
+      class Stethoscope < SQLObject
         belongs_to :doctor
+        finalize!
       end
     end
 
